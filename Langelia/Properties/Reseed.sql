@@ -1,0 +1,2 @@
+DBCC CHECKIDENT (Cell , RESEED, 0)
+
