@@ -9,6 +9,7 @@ using System.Xml.XPath;
 using System.Xml;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
+using System.IO;
 using System.Windows.Forms;
 using TiledSharp;
 
@@ -23,7 +24,8 @@ namespace Langelia
 
         private void NewGame_Click(object sender, EventArgs e)
         {
-            var map = new TmxMap(@"C:\Users\пк\Desktop\Учёба\2 курс\Курсовая\Langelia\Langelia\Properties\Map.tmx");
+            DirectoryInfo dir = new DirectoryInfo(@"C:\Users\пк\Desktop\Учёба\2 курс\Курсовая\Langelia\Langelia_coursepaper\Langelia");
+            var map = new TmxMap(dir.FullName + @"\Properties\Map.tmx");
             var layerGraph = map.Layers[3];
             var layerType = map.Layers[2];
             var layerPassability = map.Layers[1];

@@ -19,6 +19,7 @@ namespace Langelia
         private int _x;
         private int _y;
         private bool active = false;
+        private string pathColor;
 
         public int X { get { return _x; } }
         public int Y { get { return _y; } }
@@ -36,6 +37,16 @@ namespace Langelia
         {
             get { return _id; }
         }
+        public string PathColor
+        {
+            get { return pathColor; }
+            set { pathColor = value; }
+        }
+        public int Feature { get { return _feature; } }
+        public string Name { get { return _name; } }
+        public int Health { get { return _health; } }
+        public int Defense { get { return _defense; } }
+        public int Attack { get { return _attack; } }
 
         public Person() { }
 
