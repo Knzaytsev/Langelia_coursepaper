@@ -16,8 +16,8 @@ namespace Langelia
     {
         public MainMenu mainMenu = new MainMenu();
         private Dictionary<int, Person> people = new Dictionary<int, Person>();
+        private Dictionary<int, City> cities = new Dictionary<int, City>();
         private AboutPerson aboutPerson;
-        //private List<Person> actPeople = new List<Person>();
         private Person activePerson = new Person();
         private DirectoryInfo dir = new DirectoryInfo(@"C:\Users\пк\Desktop\Учёба\2 курс\Курсовая\Langelia\Langelia_coursepaper\Langelia");
         private string connectionStr = @"Data Source=.\SQLSERVEREDU;Initial Catalog=GameLang;Integrated Security=True";
@@ -94,11 +94,12 @@ namespace Langelia
             using (SqlConnection connection = new SqlConnection(connectionStr))
             {
                 connection.Open();
-                foreach (var p in people.Values)
+                sqlExp = $"SELECT Id, Number_move FROM Person";
+                SqlCommand cmd = new SqlCommand(sqlExp, connection);
+                SqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
                 {
-                    sqlExp = $"UPDATE Person SET X = {p.X}, Y = {p.Y} WHERE Id = {p.Id}";
-                    SqlCommand cmd = new SqlCommand(sqlExp, connection);
-                    cmd.ExecuteNonQuery();
+                    people[reader.GetInt32(0)].NumberMove = reader.GetInt32(1);
                 }
             }
 
@@ -122,55 +123,33 @@ namespace Langelia
                 using (SqlConnection connection = new SqlConnection(connectionStr))
                 {
                     connection.Open();
-                    /*sqlExp =
-                        string.Format("SELECT City FROM Player WHERE Id = 1 AND City = (SELECT Id FROM City WHERE Cell = {0})", id);*/
-                    sqlExp = string.Format(@"SELECT * FROM City WHERE Id = (SELECT Id FROM Player WHERE City.Id = Id) 
-                                                AND Cell = {0}", id);
+                    sqlExp = $"SELECT * FROM City WHERE Id_player = 1 AND Id = (SELECT Id_city FROM Cell WHERE Cell.Id = {id})";
                     SqlCommand cmd = new SqlCommand(sqlExp, connection);
                     SqlDataReader reader = cmd.ExecuteReader();
-                    //int exmp = cmd.ExecuteNonQuery();
                     if(!reader.Read())
                     {
                         reader.Close();
                         x *= 32;
                         y *= 32;
-                        /*sqlExp = string.Format(@"SELECT * FROM Person WHERE Id = (SELECT Id FROM Player 
-                                    WHERE Person.Id = Id) AND X = {0} AND Y = {1}", x, y);
-                        cmd = new SqlCommand(sqlExp, connection);
-                        //int exmp = cmd.ExecuteNonQuery();
-                        reader = cmd.ExecuteReader();
-                        if (reader.Read())
-                        {
-                            activePerson = new Person(reader.GetInt32(0), reader.GetString(1), reader.GetInt32(2), 
-                                reader.GetInt32(3), reader.GetInt32(4), reader.GetInt32(5), reader.GetInt32(6), 
-                                reader.GetInt32(7), reader.GetInt32(8));
-                            activePerson.Active = true;
-                        }*/
-                        sqlExp = string.Format(@"SELECT Id FROM Person WHERE Id = (SELECT Id FROM Player 
-                                    WHERE Person.Id = Id) AND X = {0} AND Y = {1}", x, y);
+                        sqlExp = $"SELECT Id FROM Person WHERE Id_player = 1 AND X = {x} AND Y = {y}";
                         cmd = new SqlCommand(sqlExp, connection);
                         reader = cmd.ExecuteReader();
                         if (reader.Read())
                         {
+                            activePerson.Active = false;
                             aboutPerson?.Close();
                             activePerson = people[reader.GetInt32(0)];
                             reader.Close();
-                            sqlExp = $"SELECT Name FROM Feature WHERE Id = {activePerson.Feature}";
-                            cmd = new SqlCommand(sqlExp, connection);
-                            reader = cmd.ExecuteReader();
-                            reader.Read();
-                            activePerson.Active = false;
                             aboutPerson = new AboutPerson();
-                            aboutPerson.About(activePerson.Name, reader.GetString(0), activePerson.NumberMove, 
-                                activePerson.Health, activePerson.Defense, activePerson.Attack);
+                            aboutPerson.About(activePerson, this);
                             aboutPerson.Show();
                             activePerson.Active = true;
                         }
-                    }
-                    else
-                    {
-                        aboutPerson.Close();
-                        activePerson.Active = false;
+                        else
+                        {
+                            aboutPerson?.Close();
+                            activePerson.Active = false;
+                        }
                     }
                     connection.Close();
                 }
@@ -179,59 +158,61 @@ namespace Langelia
             {
                 if(activePerson.Active)
                 {
-                    int x = e.X / 32;
-                    int y = e.Y / 32;
-                    int id = y * 40 + x + 1;
-                    using(SqlConnection connection = new SqlConnection(connectionStr))
+                    int oldX = activePerson.X;
+                    int oldY = activePerson.Y;
+                    string moveDone = activePerson.Movement(e.X / 32, e.Y / 32, connectionStr);
+                    if (moveDone == "")
                     {
-                        connection.Open();
-                        sqlExp = string.Format("SELECT Passability, Penalty FROM Cell WHERE Id = {0}", id);
-                        SqlCommand cmd = new SqlCommand(sqlExp, connection);
-                        SqlDataReader reader = cmd.ExecuteReader();
-                        reader.Read();
-                        int pass = reader.GetInt32(0);
-                        x *= 32;
-                        y *= 32;
-                        if (pass != 1 && ((x == activePerson.X + 32 && y == activePerson.Y) ||
-                            (x == activePerson.X - 32 && y == activePerson.Y) || 
-                            (x == activePerson.X && y == activePerson.Y + 32) ||
-                            (x == activePerson.X && y == activePerson.Y - 32)) && !(x == activePerson.X && y == activePerson.Y))
-                        {
-                            int penalty = reader.GetInt32(1);
-                            reader.Close();
-                            if (activePerson.NumberMove - penalty >= 0)
-                            {
-                                Graphics g = Graphics.FromImage(pictureBox1.Image);
-                                x = activePerson.X / 32;
-                                y = activePerson.Y / 32;
-                                id = y * 40 + x + 1;
-                                sqlExp = $"SELECT Path FROM Picture WHERE Id = (SELECT Picture FROM Cell WHERE Id = {id})";
-                                cmd = new SqlCommand(sqlExp, connection);
-                                reader = cmd.ExecuteReader();
-                                reader.Read();
-                                Bitmap bmp = new Bitmap(reader.GetString(0));
-                                g.DrawImage(bmp, activePerson.X - 2, activePerson.Y);
-                                activePerson.Movement(e.X, e.Y);
-                                activePerson.NumberMove -= penalty;
-                                //SolidBrush brush = new SolidBrush(Color.Black);
-                                //g.FillRectangle(brush, activePerson.X - 2, activePerson.Y, 32, 32);
-                                bmp = new Bitmap(activePerson.PathColor);
-                                people[activePerson.Id] = activePerson;
-                                g.DrawImage(bmp, activePerson.X - 2, activePerson.Y);
-                                pictureBox1.Refresh();
-                                g.Dispose();
-                                //actPeople.Add(activePerson);
-                            }
-                            else
-                            {
-                                MessageBox.Show("Превышен лимит!");
-                            }
-                        }
+                        people[activePerson.Id] = activePerson;
+                        aboutPerson.ChangingMove(activePerson.NumberMove);
+                        DrawMovement(oldX / 32, oldY / 32);
+                    }
+                    else if(moveDone != "0")
+                    {
+                        MessageBox.Show(moveDone);
                     }
                 }
             }
         }
 
+        public void CreateCity()
+        {
+            using (SqlConnection connection = new SqlConnection(connectionStr))
+            {
+                connection.Open();
+                City city = activePerson.CreateCity(connectionStr);
+                int x = activePerson.X;
+                int y = activePerson.Y;
+                people.Remove(activePerson.Id);
+                sqlExp = $"SELECT Path FROM Picture WHERE Id = 9";
+                SqlCommand cmd = new SqlCommand(sqlExp, connection);
+                SqlDataReader reader = cmd.ExecuteReader();
+                reader.Read();
+                Graphics g = Graphics.FromImage(pictureBox1.Image);
+                Bitmap bmp = new Bitmap(reader.GetString(0));
+                g.DrawImage(bmp, x - 2, y);
+                pictureBox1.Refresh();
+            }
+        }
+
+        private void DrawMovement(int x, int y)
+        {
+            using(SqlConnection connection = new SqlConnection(connectionStr))
+            {
+                connection.Open();
+                int id = y * 40 + x + 1;
+                sqlExp = $"SELECT Path FROM Picture WHERE Id = (SELECT Picture FROM Cell WHERE Id = {id})";
+                SqlCommand cmd = new SqlCommand(sqlExp, connection);
+                SqlDataReader reader = cmd.ExecuteReader();
+                reader.Read();
+                Graphics g = Graphics.FromImage(pictureBox1.Image);
+                Bitmap bmp = new Bitmap(reader.GetString(0));
+                g.DrawImage(bmp, x * 32 - 2, y * 32);
+                bmp = new Bitmap(activePerson.PathColor);
+                g.DrawImage(bmp, activePerson.X - 2, activePerson.Y);
+                pictureBox1.Refresh();
+            }
+        }
 
         private void FormLoad(object sender, EventArgs e)
         {
@@ -250,9 +231,6 @@ namespace Langelia
                         reader.GetInt32(3), reader.GetInt32(4), reader.GetInt32(5), reader.GetInt32(6), reader.GetInt32(7),
                         reader.GetInt32(8));
                     people.Add(reader.GetInt32(0), person);
-                    //Bitmap bmp = new Bitmap
-                    //SolidBrush brush = new SolidBrush(Color.Black);
-                    //g.FillRectangle(brush, reader.GetInt32(0) - 2, reader.GetInt32(1), 32, 32);
                 }
                 reader.Close();
                 foreach(var p in people.Values)
@@ -281,15 +259,6 @@ namespace Langelia
                 g.Dispose();
                 connection.Close();
             }
-        }
-
-        private int ComputeId(int x, int y)
-        {
-            x /= 32;
-            y /= 32;
-            x *= 32;
-            y *= 32;
-            return y * 40 + x + 1;
         }
     }
 }

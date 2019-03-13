@@ -30,12 +30,12 @@ namespace Langelia
             var layerType = map.Layers[2];
             var layerPassability = map.Layers[1];
             var layerPenalty = map.Layers[0];
-            /*using (SqlConnection connection =
+            DataBaseCommands.Cleaning();
+            using (SqlConnection connection =
                 new SqlConnection(@"Data Source=.\SQLSERVEREDU;Initial Catalog=GameLang;Integrated Security=True"))
             {
                 connection.Open();
                 SqlCommand cmd;
-                string sqlExp;
                 //SqlCommand command = new SqlCommand("DBCC CHECKIDENT (Cell, RESEED, 0)", connection);
                 for (int i = 0; i < map.Layers[0].Tiles.Count; ++i)
                 {
@@ -43,14 +43,14 @@ namespace Langelia
                     int pen = layerPenalty.Tiles[i].Gid;
                     int type = layerType.Tiles[i].Gid != 0 ? layerType.Tiles[i].Gid : 3;
                     int picture = layerGraph.Tiles[i].Gid;
-                    //string sqlExp = string.Format(@"INSERT INTO Cell (Passability, Penalty, Production, Picture) 
-                            //VALUES ({0}, {1}, {2}, {3})", pass, pen, type, picture);
-                    sqlExp = string.Format(@"UPDATE Cell SET Passability = {0}, Penalty = {1}, Production = {2}, 
-                            Picture = {3} WHERE Id = {4}", pass, pen, type, picture, i + 1);
+                    string sqlExp = string.Format(@"INSERT INTO Cell (Passability, Penalty, Production, Picture) 
+                            VALUES ({0}, {1}, {2}, {3})", pass, pen, type, picture);
+                    //sqlExp = string.Format(@"UPDATE Cell SET Passability = {0}, Penalty = {1}, Production = {2}, 
+                            //Picture = {3} WHERE Id = {4}", pass, pen, type, picture, i + 1);
                     cmd = new SqlCommand(sqlExp, connection);
                     cmd.ExecuteNonQuery();
                 }
-            }*/
+            }
             GameProcess form = new GameProcess();
             form.mainMenu = this;
             this.Visible = false;

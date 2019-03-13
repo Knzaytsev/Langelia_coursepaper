@@ -79,6 +79,8 @@
     <Compile Include="AttitudeTrade.Designer.cs">
       <DependentUpon>AttitudeTrade.cs</DependentUpon>
     </Compile>
+    <Compile Include="City.cs" />
+    <Compile Include="DataBaseCommands.cs" />
     <Compile Include="MainMenu.cs">
       <SubType>Form</SubType>
     </Compile>

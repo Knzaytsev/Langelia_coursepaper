@@ -72,6 +72,7 @@
             this.action.Size = new System.Drawing.Size(148, 119);
             this.action.TabIndex = 2;
             this.action.UseVisualStyleBackColor = true;
+            this.action.Click += new System.EventHandler(this.action_Click);
             // 
             // healthPerson
             // 
