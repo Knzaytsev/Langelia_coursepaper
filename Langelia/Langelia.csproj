@@ -49,6 +49,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AboutCity.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AboutCity.Designer.cs">
+      <DependentUpon>AboutCity.cs</DependentUpon>
+    </Compile>
     <Compile Include="AboutPerson.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -99,9 +105,18 @@
     <Compile Include="ListObjects.Designer.cs">
       <DependentUpon>ListObjects.cs</DependentUpon>
     </Compile>
+    <Compile Include="NameCity.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="NameCity.Designer.cs">
+      <DependentUpon>NameCity.cs</DependentUpon>
+    </Compile>
     <Compile Include="Person.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="AboutCity.resx">
+      <DependentUpon>AboutCity.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="AboutPerson.resx">
       <DependentUpon>AboutPerson.cs</DependentUpon>
     </EmbeddedResource>
@@ -125,6 +140,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ListObjects.resx">
       <DependentUpon>ListObjects.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NameCity.resx">
+      <DependentUpon>NameCity.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

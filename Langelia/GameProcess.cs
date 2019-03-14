@@ -101,6 +101,14 @@ namespace Langelia
                 {
                     people[reader.GetInt32(0)].NumberMove = reader.GetInt32(1);
                 }
+                reader.Close();
+                foreach(var c in cities.Values)
+                {
+                    sqlExp = $"UPDATE Player SET Number_production = Number_production + {c.NumberProduct} " +
+                        $"WHERE Id = (SELECT Id_player FROM City WHERE Id = {c.Id})";
+                    (new SqlCommand(sqlExp, connection)).ExecuteNonQuery();
+                }
+                //sqlExp = $"SELECT * FROM List_build WHERE ";
             }
 
         }
@@ -151,6 +159,14 @@ namespace Langelia
                             activePerson.Active = false;
                         }
                     }
+                    else
+                    {
+                        if (cities.ContainsKey(reader.GetInt32(0))){
+                            AboutCity aboutCity = new AboutCity();
+                            aboutCity.About(cities[reader.GetInt32(0)], connectionStr, this);
+                            aboutCity.Show();
+                        }
+                    }
                     connection.Close();
                 }
             }
@@ -177,10 +193,21 @@ namespace Langelia
 
         public void CreateCity()
         {
+            NameCity nc = new NameCity();
+            string nameCity = "";
+            if(nc.ShowDialog(this) == DialogResult.OK)
+            {
+                nameCity = nc.CityName.Text;
+            }
+            else
+            {
+                nc.Dispose();
+                return;
+            }
             using (SqlConnection connection = new SqlConnection(connectionStr))
             {
                 connection.Open();
-                City city = activePerson.CreateCity(connectionStr);
+                City city = activePerson.CreateCity(connectionStr, nameCity);
                 int x = activePerson.X;
                 int y = activePerson.Y;
                 people.Remove(activePerson.Id);
@@ -192,7 +219,18 @@ namespace Langelia
                 Bitmap bmp = new Bitmap(reader.GetString(0));
                 g.DrawImage(bmp, x - 2, y);
                 pictureBox1.Refresh();
+                cities.Add(city.Id, city);
             }
+        }
+
+        public void DestroyCity(int id)
+        {
+            cities.Remove(id);
+        }
+
+        public void CreateBuilding(int id, int numberProduction)
+        {
+            cities[id].NumberProduct = numberProduction;
         }
 
         private void DrawMovement(int x, int y)

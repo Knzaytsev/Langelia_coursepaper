@@ -14,8 +14,10 @@ namespace Langelia
         public static void Cleaning()
         {
             CleanCells();
+            CleanListBuild();
             CleanCities();
             CleanPersons();
+            CleanPlayer();
         }
 
         private static void CleanCells()
@@ -49,6 +51,30 @@ namespace Langelia
                             $"VALUES ('diplomat1', 8, 100, 0, 0, 3, 32, 96, 1)";
                 cmd = new SqlCommand(sqlExp, connection);
                 cmd.ExecuteNonQuery();
+            }
+        }
+
+        private static void CleanListBuild()
+        {
+            string sqlExp = "DELETE FROM List_build";
+            NonQuery(sqlExp, "List_build");
+        }
+
+        private static void CleanPlayer()
+        {
+            string sqlExp = "UPDATE Player SET Number_citizen = 0, Number_culture = 0, Number_military = 0, " +
+                "Number_diplomacy = 0, Attitude = NULL, Alliance = NULL, Trade = NULL, War = NULL, Development = NULL, " +
+                "Name_ruler = 'Каэлисто', Type_ruler_points = 1, Age = 0, Dip_act = NULL, Number_production = 0 WHERE Id = 1; " +
+                "UPDATE Player SET Number_citizen = 0, Number_culture = 0, Number_military = 0, " +
+                "Number_diplomacy = 0, Attitude = NULL, Alliance = NULL, Trade = NULL, War = NULL, Development = NULL, " +
+                "Name_ruler = 'Лиом', Type_ruler_points = 1, Age = 0, Dip_act = NULL, Number_production = 0 WHERE Id = 2; " +
+                "UPDATE Player SET Number_citizen = 0, Number_culture = 0, Number_military = 0, " +
+                "Number_diplomacy = 0, Attitude = NULL, Alliance = NULL, Trade = NULL, War = NULL, Development = NULL, " +
+                "Name_ruler = 'Уони', Type_ruler_points = 1, Age = 0, Dip_act = NULL, Number_production = 0 WHERE Id = 3";
+            using(SqlConnection connection = new SqlConnection(sqlConnection))
+            {
+                connection.Open();
+                (new SqlCommand(sqlExp, connection)).ExecuteNonQuery();
             }
         }
 

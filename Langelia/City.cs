@@ -14,6 +14,16 @@ namespace Langelia
         private int _numberProduct;
         private int _numberFood;
 
+        public int Id { get { return _id; } }
+        public string NameCity { get { return _nameCity; } }
+        public int NumberCitizen { get { return _numberCitizen; } }
+        public int NumberProduct
+        {
+            get { return _numberProduct; }
+            set { _numberProduct = value; }
+        }
+        public int NumberFood { get { return _numberFood; } }
+
         public City() { }
 
         public City(int id, string nameCity, int numberCitizen, int numberProduct, int numberFood)
@@ -24,5 +34,6 @@ namespace Langelia
             _numberFood = numberFood;
             _numberProduct = numberProduct;
         }
+
     }
 }

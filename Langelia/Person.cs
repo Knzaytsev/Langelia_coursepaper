@@ -64,14 +64,15 @@ namespace Langelia
             _y = y;
         }
 
-        public City CreateCity(string sqlConnection)
+        public City CreateCity(string sqlConnection, string nameCity)
         {
-            string name = "'Test'";
+            string name = "'" + nameCity + "'";
             int profit = 0;
             int numberCitizen = 1;
             int numberProduct = 0;
             int numberFood = 0;
             int idPlayer = 0;
+            int idCity = 0;
             using (SqlConnection connection = new SqlConnection(sqlConnection))
             {
                 connection.Open();
@@ -88,14 +89,35 @@ namespace Langelia
                     $"VALUES ({name}, {profit}, {numberCitizen}, {numberProduct}, {numberFood}, {idPlayer})";
                 cmd = new SqlCommand(sqlExp, connection);
                 cmd.ExecuteNonQuery();
-                sqlExp = $"UPDATE Cell SET Id_city = 1 WHERE Id = {id}";
+                sqlExp = $"SELECT Id FROM City";
+                reader = (new SqlCommand(sqlExp, connection)).ExecuteReader();
+                while (reader.Read())
+                {
+                    idCity = reader.GetInt32(0);
+                }
+                reader.Close();
+                sqlExp = $"UPDATE Cell SET Id_city = {idCity} WHERE Id = {id}";
                 cmd = new SqlCommand(sqlExp, connection);
                 cmd.ExecuteNonQuery();
+                sqlExp = $"UPDATE City SET Number_product = CASE (SELECT Production FROM Cell WHERE Id_city = {idCity}) " +
+                    $"WHEN 1 THEN 0 " +
+                    $"WHEN 2 THEN(SELECT Number FROM Production WHERE Id = (SELECT Production FROM Cell WHERE Id_city = {idCity})) " +
+                    $"END, " +
+                    $"Number_food = CASE(SELECT Production FROM Cell WHERE Id_city = {idCity}) " +
+                    $"WHEN 1 THEN (SELECT Number FROM Production WHERE Id = (SELECT Production FROM Cell WHERE Id_city = {idCity})) " +
+                    $"WHEN 2 THEN 0 " +
+                    $"END";
+                (new SqlCommand(sqlExp, connection)).ExecuteNonQuery();
                 sqlExp = $"DELETE FROM Person WHERE Id = {_id}";
                 cmd = new SqlCommand(sqlExp, connection);
                 cmd.ExecuteNonQuery();
+                sqlExp = $"SELECT Number_product, Number_food FROM City WHERE Id = {idCity}";
+                reader = (new SqlCommand(sqlExp, connection)).ExecuteReader();
+                reader.Read();
+                numberProduct = reader.GetInt32(0);
+                numberFood = reader.GetInt32(1);
             }
-            return new City(1, name, numberCitizen, numberProduct, numberFood);
+            return new City(idCity, name, numberCitizen, numberProduct, numberFood);
         }
 
         public string Movement(int x, int y, string connectionStr)

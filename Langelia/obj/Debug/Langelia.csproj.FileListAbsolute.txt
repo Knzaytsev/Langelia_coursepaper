@@ -37,3 +37,5 @@ C:\Users\пк\Desktop\Учёба\2 курс\Курсовая\Langelia\Langelia_c
 C:\Users\пк\Desktop\Учёба\2 курс\Курсовая\Langelia\Langelia_coursepaper\Langelia\obj\Debug\Langelia.exe
 C:\Users\пк\Desktop\Учёба\2 курс\Курсовая\Langelia\Langelia_coursepaper\Langelia\obj\Debug\Langelia.pdb
 C:\Users\пк\Desktop\Учёба\2 курс\Курсовая\Langelia\Langelia_coursepaper\Langelia\obj\Debug\Langelia.AboutPerson.resources
+C:\Users\пк\Desktop\Учёба\2 курс\Курсовая\Langelia\Langelia_coursepaper\Langelia\obj\Debug\Langelia.AboutCity.resources
+C:\Users\пк\Desktop\Учёба\2 курс\Курсовая\Langelia\Langelia_coursepaper\Langelia\obj\Debug\Langelia.NameCity.resources
