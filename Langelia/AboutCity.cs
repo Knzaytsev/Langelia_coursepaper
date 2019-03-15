@@ -23,10 +23,12 @@ namespace Langelia
 
         public void About(City city, string sqlConnection, GameProcess process)
         {
-            nameCity.Text = city.NameCity.ToUpper();
+            nameCity.Text = city.NameCity.ToUpper().Replace("'", "");
             numberCitizen.Text = (city.NumberCitizen * 100).ToString();
             numberFood.Text = city.NumberFood.ToString();
             numberProduction.Text = city.NumberProduct.ToString();
+            numberCulture.Text = city.NumberCulture.ToString();
+            numberMilitary.Text = city.NumberMilitary.ToString();
             _city = city;
             _sqlConnection = sqlConnection;
             gp = process;
@@ -83,28 +85,11 @@ namespace Langelia
 
         private void Creating(int id)
         {
-            using (SqlConnection connection = new SqlConnection(_sqlConnection))
-            {
-                connection.Open();
-                string sqlExp = $"SELECT Time FROM Building WHERE Id = {id}";
-                SqlDataReader reader = (new SqlCommand(sqlExp, connection)).ExecuteReader();
-                reader.Read();
-                sqlExp = $"INSERT INTO List_build (Time_build, Id_building, Id_city) VALUES ({reader.GetInt32(0)}, {id}, {_city.Id})";
-                reader.Close();
-                (new SqlCommand(sqlExp, connection)).ExecuteNonQuery();
-                sqlExp = $"UPDATE Player SET Number_production = Number_production - (SELECT Cost FROM Building WHERE Id = {id}) " +
-                    $"WHERE Id = (SELECT Id_player FROM City WHERE Id = {_city.Id})";
-                (new SqlCommand(sqlExp, connection)).ExecuteNonQuery();
-                sqlExp = $"UPDATE City SET Number_product = Number_product + " +
-                    $"(SELECT Number FROM Type_build_points WHERE Id = (SELECT Type_points FROM Building WHERE Id = {id}))";
-                (new SqlCommand(sqlExp, connection)).ExecuteNonQuery();
-                sqlExp = $"SELECT Number_product FROM City WHERE Id = {_city.Id}";
-                reader = (new SqlCommand(sqlExp, connection)).ExecuteReader();
-                reader.Read();
-                numberProduction.Text = reader.GetInt32(0).ToString();
-                _city.NumberProduct = reader.GetInt32(0);
-                gp.CreateBuilding(_city.Id, _city.NumberProduct);
-            }
+            _city.CreateBuilding(id, _sqlConnection);
+            numberProduction.Text = _city.NumberProduct.ToString();
+            numberCulture.Text = _city.NumberCulture.ToString();
+            numberMilitary.Text = _city.NumberMilitary.ToString();
+            gp.CreateBuilding(_city);
         }
 
         private bool CheckProduction(int id)
@@ -146,7 +131,7 @@ namespace Langelia
             else if (CheckBuilding(1))
             {
                 createLibrary.Enabled = false;
-                createLibrary.FlatAppearance.BorderColor = Color.Gold;
+                //createLibrary.FlatAppearance.BorderColor = Color.Gold;
             }
             if (!CheckProduction(2))
             {
@@ -205,8 +190,7 @@ namespace Langelia
 
         private void destroyCity_Click(object sender, EventArgs e)
         {
-            string sqlExp = $"DELETE FROM List_build WHERE Id_city = {_city.Id}";
-            gp.DestroyCity(_city.Id);
+            gp.DestroyCity(_city);
             Close();
         }
     }

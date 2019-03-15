@@ -18,6 +18,7 @@ namespace Langelia
         private Dictionary<int, Person> people = new Dictionary<int, Person>();
         private Dictionary<int, City> cities = new Dictionary<int, City>();
         private AboutPerson aboutPerson;
+        private AboutCity aboutCity;
         private Person activePerson = new Person();
         private DirectoryInfo dir = new DirectoryInfo(@"C:\Users\пк\Desktop\Учёба\2 курс\Курсовая\Langelia\Langelia_coursepaper\Langelia");
         private string connectionStr = @"Data Source=.\SQLSERVEREDU;Initial Catalog=GameLang;Integrated Security=True";
@@ -104,12 +105,25 @@ namespace Langelia
                 reader.Close();
                 foreach(var c in cities.Values)
                 {
-                    sqlExp = $"UPDATE Player SET Number_production = Number_production + {c.NumberProduct} " +
+                    sqlExp = $"UPDATE Player SET Number_production = Number_production + {c.NumberProduct}, " +
+                        $" Number_culture = Number_culture + {c.NumberCulture}, " +
+                        $"Number_military = Number_military + {c.NumberMilitary} " +
                         $"WHERE Id = (SELECT Id_player FROM City WHERE Id = {c.Id})";
                     (new SqlCommand(sqlExp, connection)).ExecuteNonQuery();
                 }
-                //sqlExp = $"SELECT * FROM List_build WHERE ";
+                sqlExp = $"UPDATE PLAYER SET Number_production = Number_production + CASE Type_ruler_points " +
+                    $"WHEN 1 THEN(SELECT Number FROM Type_ruler_points WHERE Id = 1) ELSE 0 " +
+                    $"END, " +
+                    $"Number_culture = Number_culture + CASE Type_ruler_points " +
+                    $"WHEN 2 THEN(SELECT Number FROM Type_ruler_points WHERE Id = 2) ELSE 0 " +
+                    $"END, " +
+                    $"Number_military = Number_military + CASE Type_ruler_points " +
+                    $"WHEN 3 THEN(SELECT Number FROM Type_ruler_points WHERE Id = 3) ELSE 0 " +
+                    $"END";
+                (new SqlCommand(sqlExp, connection)).ExecuteNonQuery();
             }
+            aboutCity?.Close();
+            aboutPerson?.Close();
 
         }
 
@@ -156,13 +170,15 @@ namespace Langelia
                         else
                         {
                             aboutPerson?.Close();
+                            aboutCity?.Close();
                             activePerson.Active = false;
                         }
                     }
                     else
                     {
                         if (cities.ContainsKey(reader.GetInt32(0))){
-                            AboutCity aboutCity = new AboutCity();
+                            aboutCity?.Close();
+                            aboutCity = new AboutCity();
                             aboutCity.About(cities[reader.GetInt32(0)], connectionStr, this);
                             aboutCity.Show();
                         }
@@ -223,14 +239,37 @@ namespace Langelia
             }
         }
 
-        public void DestroyCity(int id)
+        public void DestroyCity(City city)
         {
-            cities.Remove(id);
+            cities.Remove(city.Id);
+            DrawCell(city.Id);
+            city.DestroyCity(connectionStr);
         }
 
-        public void CreateBuilding(int id, int numberProduction)
+        public void CreateBuilding(City city)
         {
-            cities[id].NumberProduct = numberProduction;
+            cities[city.Id] = city;
+        }
+
+        private void DrawCell(int id)
+        {
+            using(SqlConnection connection = new SqlConnection(connectionStr))
+            {
+                connection.Open();
+                sqlExp = $"SELECT Id FROM Cell WHERE Id_city = {id}";
+                SqlDataReader reader = (new SqlCommand(sqlExp, connection)).ExecuteReader();
+                reader.Read();
+                int idCell = reader.GetInt32(0);
+                reader.Close();
+                sqlExp = $"SELECT Path FROM Picture WHERE Id = (SELECT Picture FROM Cell WHERE Id = {idCell})";
+                reader = (new SqlCommand(sqlExp, connection)).ExecuteReader();
+                reader.Read();
+                Graphics g = Graphics.FromImage(pictureBox1.Image);
+                int x = idCell % 40 - 1;
+                int y = idCell / 40;
+                g.DrawImage(new Bitmap(reader.GetString(0)), x * 32 - 2, y * 32);
+                pictureBox1.Refresh();
+            }
         }
 
         private void DrawMovement(int x, int y)
@@ -267,7 +306,7 @@ namespace Langelia
                 {
                     Person person = new Person(reader.GetInt32(0), reader.GetString(1), reader.GetInt32(2),
                         reader.GetInt32(3), reader.GetInt32(4), reader.GetInt32(5), reader.GetInt32(6), reader.GetInt32(7),
-                        reader.GetInt32(8));
+                        reader.GetInt32(8), reader.GetInt32(9));
                     people.Add(reader.GetInt32(0), person);
                 }
                 reader.Close();
@@ -276,13 +315,13 @@ namespace Langelia
                     switch (p.Feature)
                     {
                         case 1:
-                            sqlExp = $"SELECT Path FROM Picture WHERE Id = {8} ";
+                            sqlExp = $"SELECT Path FROM Picture WHERE Id = {(p.Player - 1) * 5 + 8}";
                             break;
                         case 2:
-                            sqlExp = $"SELECT Path FROM Picture WHERE Id = {6}";
+                            sqlExp = $"SELECT Path FROM Picture WHERE Id = {(p.Player - 1) * 5 + 6}";
                             break;
                         case 3:
-                            sqlExp = $"SELECT Path FROM Picture WHERE Id = {7}";
+                            sqlExp = $"SELECT Path FROM Picture WHERE Id = {(p.Player - 1) * 5 + 7}";
                             break;
                     }
                     cmd = new SqlCommand(sqlExp, connection);
@@ -292,6 +331,14 @@ namespace Langelia
                     p.PathColor = reader.GetString(0);
                     g.DrawImage(bmp, p.X - 2, p.Y);
                     reader.Close();
+                }
+                sqlExp = $"SELECT * FROM City";
+                reader = (new SqlCommand(sqlExp, connection)).ExecuteReader();
+                while (reader.Read())
+                {
+                    cities.Add(reader.GetInt32(0), new City(reader.GetInt32(0), reader.GetString(1), reader.GetInt32(3), 
+                        reader.GetInt32(4), reader.GetInt32(5), reader.GetInt32(7), reader.GetInt32(8)));
+                    DrawCell(reader.GetInt32(0));
                 }
                 pictureBox1.Refresh();
                 g.Dispose();

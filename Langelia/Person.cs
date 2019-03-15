@@ -21,6 +21,7 @@ namespace Langelia
         private int _y;
         private bool active = false;
         private string pathColor;
+        private int _player;
 
         public int X { get { return _x; } }
         public int Y { get { return _y; } }
@@ -48,10 +49,12 @@ namespace Langelia
         public int Health { get { return _health; } }
         public int Defense { get { return _defense; } }
         public int Attack { get { return _attack; } }
+        public int Player { get { return _player; } }
 
         public Person() { }
 
-        public Person(int id, string name, int numberMove, int health, int attack, int defense, int feature, int x, int y)
+        public Person(int id, string name, int numberMove, int health, int attack, int defense, int feature, 
+            int x, int y, int player)
         {
             _id = id;
             _name = name;
@@ -62,6 +65,7 @@ namespace Langelia
             _feature = feature;
             _x = x;
             _y = y;
+            _player = player;
         }
 
         public City CreateCity(string sqlConnection, string nameCity)
@@ -85,8 +89,9 @@ namespace Langelia
                 reader.Read();
                 idPlayer = reader.GetInt32(0);
                 reader.Close();
-                sqlExp = $"INSERT INTO City (Name_city, Profit, Number_citizen, Number_product, Number_food, Id_player) " +
-                    $"VALUES ({name}, {profit}, {numberCitizen}, {numberProduct}, {numberFood}, {idPlayer})";
+                sqlExp = $"INSERT INTO City (Name_city, Profit, Number_citizen, Number_product, Number_food, Id_player, " +
+                    $"Number_culture, Number_military) VALUES ({name}, {profit}, {numberCitizen}, {numberProduct}, {numberFood}, " +
+                    $"{idPlayer}, {0}, {0})";
                 cmd = new SqlCommand(sqlExp, connection);
                 cmd.ExecuteNonQuery();
                 sqlExp = $"SELECT Id FROM City";
@@ -117,7 +122,7 @@ namespace Langelia
                 numberProduct = reader.GetInt32(0);
                 numberFood = reader.GetInt32(1);
             }
-            return new City(idCity, name, numberCitizen, numberProduct, numberFood);
+            return new City(idCity, name, numberCitizen, numberProduct, numberFood, 0, 0);
         }
 
         public string Movement(int x, int y, string connectionStr)

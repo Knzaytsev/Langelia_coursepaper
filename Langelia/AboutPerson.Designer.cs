@@ -190,7 +190,7 @@
             this.Controls.Add(this.namePerson);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "AboutPerson";
-            this.Text = "AboutPerson";
+            this.Text = "Персонаж";
             this.ResumeLayout(false);
             this.PerformLayout();
 

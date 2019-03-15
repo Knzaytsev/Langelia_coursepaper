@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Data.SqlClient;
 
 namespace Langelia
 {
@@ -13,6 +14,8 @@ namespace Langelia
         private int _numberCitizen;
         private int _numberProduct;
         private int _numberFood;
+        private int _numberCulture;
+        private int _numberMilitary;
 
         public int Id { get { return _id; } }
         public string NameCity { get { return _nameCity; } }
@@ -22,18 +25,81 @@ namespace Langelia
             get { return _numberProduct; }
             set { _numberProduct = value; }
         }
+        public int NumberCulture
+        {
+            get { return _numberCulture; }
+            set { _numberCulture = value; }
+        }
+        public int NumberMilitary
+        {
+            get { return _numberMilitary; }
+            set { _numberMilitary = value; }
+        }
         public int NumberFood { get { return _numberFood; } }
 
         public City() { }
 
-        public City(int id, string nameCity, int numberCitizen, int numberProduct, int numberFood)
+        public City(int id, string nameCity, int numberCitizen, int numberProduct, int numberFood, int numberCulture, 
+            int numberMilitary)
         {
             _id = id;
             _nameCity = nameCity;
             _numberCitizen = numberCitizen;
             _numberFood = numberFood;
-            _numberProduct = numberProduct;
+            _numberProduct = numberProduct + 1;
+            _numberMilitary = numberMilitary;
+            _numberCulture = numberCulture;
         }
 
+        public void CreateBuilding(int id, string sqlCon)
+        {
+            using (SqlConnection connection = new SqlConnection(sqlCon))
+            {
+                connection.Open();
+                string sqlExp = $"INSERT INTO List_build (Id_building, Id_city) VALUES ({id}, {_id})";
+                (new SqlCommand(sqlExp, connection)).ExecuteNonQuery();
+                sqlExp = $"UPDATE Player SET Number_production = Number_production - (SELECT Cost FROM Building WHERE Id = {id}) " +
+                    $"WHERE Id = (SELECT Id_player FROM City WHERE Id = {_id})";
+                (new SqlCommand(sqlExp, connection)).ExecuteNonQuery();
+                sqlExp = $"SELECT Type_points FROM Building WHERE Id = {id}";
+                SqlDataReader reader = (new SqlCommand(sqlExp, connection)).ExecuteReader();
+                reader.Read();
+                string type = "";
+                switch (reader.GetInt32(0))
+                {
+                    case 1:
+                        type = "Number_culture";
+                        break;
+                    case 2:
+                        type = "Number_military";
+                        break;
+                    case 3:
+                        type = "Number_product";
+
+                        break;
+                }
+                reader.Close();
+                sqlExp = $"UPDATE City SET {type} = {type} + " +
+                    $"(SELECT Number FROM Type_build_points WHERE Id = (SELECT Type_points FROM Building WHERE Id = {id}))";
+                (new SqlCommand(sqlExp, connection)).ExecuteNonQuery();
+                sqlExp = $"SELECT Number_product, Number_culture, Number_military, Number_citizen FROM City WHERE Id = {_id}";
+                reader = (new SqlCommand(sqlExp, connection)).ExecuteReader();
+                reader.Read();
+                _numberProduct = reader.GetInt32(0);
+                _numberCulture = reader.GetInt32(1);
+                _numberMilitary = reader.GetInt32(2);
+            }
+        }
+
+        public void DestroyCity(string strCon)
+        {
+            using(SqlConnection connection = new SqlConnection(strCon))
+            {
+                connection.Open();
+                string sqlExp = $"DELETE FROM List_build WHERE Id_city = {_id}; " +
+                    $"UPDATE Cell SET Id_city = NULL WHERE Id_city = {_id}";
+                (new SqlCommand(sqlExp, connection)).ExecuteNonQuery();
+            }
+        }
     }
 }

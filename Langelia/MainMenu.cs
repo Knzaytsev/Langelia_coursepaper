@@ -44,7 +44,8 @@ namespace Langelia
                     int type = layerType.Tiles[i].Gid != 0 ? layerType.Tiles[i].Gid : 3;
                     int picture = layerGraph.Tiles[i].Gid;
                     string sqlExp = string.Format(@"INSERT INTO Cell (Passability, Penalty, Production, Picture) 
-                            VALUES ({0}, {1}, {2}, {3})", pass, pen, type, picture);
+                            VALUES ({0}, {1}, {2}, {3}); 
+                            UPDATE Cell SET Id_city = CASE Id WHEN 118 THEN 1 WHEN 622 THEN 2 END", pass, pen, type, picture);
                     //sqlExp = string.Format(@"UPDATE Cell SET Passability = {0}, Penalty = {1}, Production = {2}, 
                             //Picture = {3} WHERE Id = {4}", pass, pen, type, picture, i + 1);
                     cmd = new SqlCommand(sqlExp, connection);

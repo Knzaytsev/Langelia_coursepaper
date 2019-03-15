@@ -38,7 +38,7 @@
             this.DoneName.Location = new System.Drawing.Point(89, 49);
             this.DoneName.Name = "DoneName";
             this.DoneName.Size = new System.Drawing.Size(75, 23);
-            this.DoneName.TabIndex = 0;
+            this.DoneName.TabIndex = 1;
             this.DoneName.Text = "Задать имя";
             this.DoneName.UseVisualStyleBackColor = true;
             this.DoneName.Click += new System.EventHandler(this.DoneName_Click);
@@ -48,7 +48,7 @@
             this.CityName.Location = new System.Drawing.Point(12, 23);
             this.CityName.Name = "CityName";
             this.CityName.Size = new System.Drawing.Size(238, 20);
-            this.CityName.TabIndex = 1;
+            this.CityName.TabIndex = 0;
             // 
             // InfoName
             // 
@@ -68,7 +68,7 @@
             this.Controls.Add(this.CityName);
             this.Controls.Add(this.DoneName);
             this.Name = "NameCity";
-            this.Text = "NameCity";
+            this.Text = "Название города";
             this.ResumeLayout(false);
             this.PerformLayout();
 
