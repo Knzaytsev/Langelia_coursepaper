@@ -122,7 +122,7 @@ namespace Langelia
                 numberProduct = reader.GetInt32(0);
                 numberFood = reader.GetInt32(1);
             }
-            return new City(idCity, name, numberCitizen, numberProduct, numberFood, 0, 0);
+            return new City(idCity, name, numberCitizen, numberProduct, numberFood, 0, 0, _player);
         }
 
         public string Movement(int x, int y, string connectionStr)
@@ -135,7 +135,7 @@ namespace Langelia
                 SqlCommand cmd = new SqlCommand(sqlExp, connection);
                 SqlDataReader reader = cmd.ExecuteReader();
                 reader.Read();
-                int pass = reader.GetInt32(0);
+                int pass = reader.GetInt32(0);                          //Проходимость
                 x *= 32;
                 y *= 32;
                 if (pass != 1 && ((x == _x + 32 && y == _y) || (x == _x - 32 && y == _y) || (x == _x && y == _y + 32) ||
@@ -143,8 +143,18 @@ namespace Langelia
                 {
                     int penalty = reader.GetInt32(1);
                     reader.Close();
-                    if (_numberMove - penalty >= 0)
+                    //sqlExp = $"SELECT *, * FROM Person, City WHERE X = {x} AND Y = {y} AND City.Id = (SELECT Id_city FROM Cell WHERE Cell.Id = {id})";
+                    sqlExp = $"SELECT * FROM Person WHERE X = {x} AND Y = {y}";
+                    reader = (new SqlCommand(sqlExp, connection)).ExecuteReader();
+                    bool okPerson = reader.Read();
+                    sqlExp = $"SELECT * FROM City WHERE Id = (SELECT Id_city FROM Cell WHERE Id = {id})";
+                    reader.Close();
+                    reader = (new SqlCommand(sqlExp, connection)).ExecuteReader();
+                    bool okCity = reader.Read();
+                    reader.Close();
+                    if (_numberMove - penalty >= 0 && okPerson == false && okCity == false)
                     {
+                        reader.Close();
                         _numberMove -= penalty;
                         _x = x;
                         _y = y;
@@ -155,7 +165,7 @@ namespace Langelia
                     }
                     else
                     {
-                        return "Превышен лимит ходов!";
+                        return "Ход невозможен!";
                     }
                 }
             }

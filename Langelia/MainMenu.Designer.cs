@@ -31,7 +31,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainMenu));
             this.NewGame = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
+            this.LoadGame = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // NewGame
@@ -57,16 +57,17 @@
             this.button2.Text = "Выход";
             this.button2.UseVisualStyleBackColor = false;
             // 
-            // button3
+            // LoadGame
             // 
-            this.button3.BackColor = System.Drawing.Color.MediumPurple;
-            this.button3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button3.Location = new System.Drawing.Point(238, 135);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(132, 40);
-            this.button3.TabIndex = 2;
-            this.button3.Text = "Загрузить игру";
-            this.button3.UseVisualStyleBackColor = false;
+            this.LoadGame.BackColor = System.Drawing.Color.MediumPurple;
+            this.LoadGame.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.LoadGame.Location = new System.Drawing.Point(238, 135);
+            this.LoadGame.Name = "LoadGame";
+            this.LoadGame.Size = new System.Drawing.Size(132, 40);
+            this.LoadGame.TabIndex = 2;
+            this.LoadGame.Text = "Загрузить игру";
+            this.LoadGame.UseVisualStyleBackColor = false;
+            this.LoadGame.Click += new System.EventHandler(this.LoadGame_Click);
             // 
             // MainMenu
             // 
@@ -74,7 +75,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.ClientSize = new System.Drawing.Size(624, 321);
-            this.Controls.Add(this.button3);
+            this.Controls.Add(this.LoadGame);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.NewGame);
             this.Name = "MainMenu";
@@ -87,7 +88,7 @@
 
         private System.Windows.Forms.Button NewGame;
         private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button LoadGame;
     }
 }
 

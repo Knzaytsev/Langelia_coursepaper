@@ -29,58 +29,30 @@
         private void InitializeComponent()
         {
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.NameCity = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.NumberCitizen = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.AmountMoney = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.NaumberProduction = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
             // dataGridView1
             // 
+            this.dataGridView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.NameCity,
-            this.NumberCitizen,
-            this.AmountMoney,
-            this.NaumberProduction});
             this.dataGridView1.Location = new System.Drawing.Point(0, 0);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(442, 207);
+            this.dataGridView1.Size = new System.Drawing.Size(544, 160);
             this.dataGridView1.TabIndex = 0;
-            // 
-            // NameCity
-            // 
-            this.NameCity.HeaderText = "Название";
-            this.NameCity.Name = "NameCity";
-            this.NameCity.ReadOnly = true;
-            // 
-            // NumberCitizen
-            // 
-            this.NumberCitizen.HeaderText = "Количество жителей";
-            this.NumberCitizen.Name = "NumberCitizen";
-            this.NumberCitizen.ReadOnly = true;
-            // 
-            // AmountMoney
-            // 
-            this.AmountMoney.HeaderText = "Деньги города";
-            this.AmountMoney.Name = "AmountMoney";
-            this.AmountMoney.ReadOnly = true;
-            // 
-            // NaumberProduction
-            // 
-            this.NaumberProduction.HeaderText = "Количество производства";
-            this.NaumberProduction.Name = "NaumberProduction";
-            this.NaumberProduction.ReadOnly = true;
             // 
             // ListObjects
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(612, 336);
+            this.ClientSize = new System.Drawing.Size(544, 160);
             this.Controls.Add(this.dataGridView1);
             this.Name = "ListObjects";
             this.Text = "Список";
+            this.Load += new System.EventHandler(this.ListObjects_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
 
@@ -89,9 +61,5 @@
         #endregion
 
         private System.Windows.Forms.DataGridView dataGridView1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn NameCity;
-        private System.Windows.Forms.DataGridViewTextBoxColumn NumberCitizen;
-        private System.Windows.Forms.DataGridViewTextBoxColumn AmountMoney;
-        private System.Windows.Forms.DataGridViewTextBoxColumn NaumberProduction;
     }
 }

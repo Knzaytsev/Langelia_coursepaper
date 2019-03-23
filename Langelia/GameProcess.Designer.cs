@@ -39,14 +39,7 @@
             this.PersonsToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.PlayersToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.SearchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.отношенияToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.AllianceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.TradeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.AttitudesToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.развитиеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.CultureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.MilitaryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.ProductionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.StatisticsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.выйтиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ExitToMainMenuToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ExitGameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -63,8 +56,7 @@
             this.AboutPlayerToolStripMenuItem,
             this.списокГородовToolStripMenuItem,
             this.SearchToolStripMenuItem,
-            this.отношенияToolStripMenuItem,
-            this.развитиеToolStripMenuItem,
+            this.StatisticsToolStripMenuItem,
             this.выйтиToolStripMenuItem});
             this.MenuStrip.Location = new System.Drawing.Point(0, 0);
             this.MenuStrip.Name = "MenuStrip";
@@ -86,12 +78,14 @@
             this.SaveAsToolStripMenuItem.Name = "SaveAsToolStripMenuItem";
             this.SaveAsToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
             this.SaveAsToolStripMenuItem.Text = "Сохранить как...";
+            this.SaveAsToolStripMenuItem.Click += new System.EventHandler(this.SaveAsToolStripMenuItem_Click);
             // 
             // SaveToolStripMenuItem
             // 
             this.SaveToolStripMenuItem.Name = "SaveToolStripMenuItem";
             this.SaveToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
             this.SaveToolStripMenuItem.Text = "Сохранить";
+            this.SaveToolStripMenuItem.Click += new System.EventHandler(this.SaveToolStripMenuItem_Click);
             // 
             // AboutPlayerToolStripMenuItem
             // 
@@ -136,65 +130,14 @@
             this.SearchToolStripMenuItem.Name = "SearchToolStripMenuItem";
             this.SearchToolStripMenuItem.Size = new System.Drawing.Size(54, 20);
             this.SearchToolStripMenuItem.Text = "Поиск";
+            this.SearchToolStripMenuItem.Click += new System.EventHandler(this.SearchToolStripMenuItem_Click);
             // 
-            // отношенияToolStripMenuItem
+            // StatisticsToolStripMenuItem
             // 
-            this.отношенияToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.AllianceToolStripMenuItem,
-            this.TradeToolStripMenuItem,
-            this.AttitudesToolStripMenuItem1});
-            this.отношенияToolStripMenuItem.Name = "отношенияToolStripMenuItem";
-            this.отношенияToolStripMenuItem.Size = new System.Drawing.Size(88, 20);
-            this.отношенияToolStripMenuItem.Text = "Дипломатия";
-            // 
-            // AllianceToolStripMenuItem
-            // 
-            this.AllianceToolStripMenuItem.Name = "AllianceToolStripMenuItem";
-            this.AllianceToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
-            this.AllianceToolStripMenuItem.Text = "Союзы";
-            this.AllianceToolStripMenuItem.Click += new System.EventHandler(this.AllianceToolStripMenuItem_Click);
-            // 
-            // TradeToolStripMenuItem
-            // 
-            this.TradeToolStripMenuItem.Name = "TradeToolStripMenuItem";
-            this.TradeToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
-            this.TradeToolStripMenuItem.Text = "Торговые соглашения";
-            this.TradeToolStripMenuItem.Click += new System.EventHandler(this.TradeToolStripMenuItem_Click);
-            // 
-            // AttitudesToolStripMenuItem1
-            // 
-            this.AttitudesToolStripMenuItem1.Name = "AttitudesToolStripMenuItem1";
-            this.AttitudesToolStripMenuItem1.Size = new System.Drawing.Size(199, 22);
-            this.AttitudesToolStripMenuItem1.Text = "Отношения";
-            this.AttitudesToolStripMenuItem1.Click += new System.EventHandler(this.AttitudesToolStripMenuItem1_Click);
-            // 
-            // развитиеToolStripMenuItem
-            // 
-            this.развитиеToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.CultureToolStripMenuItem,
-            this.MilitaryToolStripMenuItem,
-            this.ProductionToolStripMenuItem});
-            this.развитиеToolStripMenuItem.Name = "развитиеToolStripMenuItem";
-            this.развитиеToolStripMenuItem.Size = new System.Drawing.Size(68, 20);
-            this.развитиеToolStripMenuItem.Text = "Развитие";
-            // 
-            // CultureToolStripMenuItem
-            // 
-            this.CultureToolStripMenuItem.Name = "CultureToolStripMenuItem";
-            this.CultureToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
-            this.CultureToolStripMenuItem.Text = "Культура";
-            // 
-            // MilitaryToolStripMenuItem
-            // 
-            this.MilitaryToolStripMenuItem.Name = "MilitaryToolStripMenuItem";
-            this.MilitaryToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
-            this.MilitaryToolStripMenuItem.Text = "Военное ремесло";
-            // 
-            // ProductionToolStripMenuItem
-            // 
-            this.ProductionToolStripMenuItem.Name = "ProductionToolStripMenuItem";
-            this.ProductionToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
-            this.ProductionToolStripMenuItem.Text = "Производство";
+            this.StatisticsToolStripMenuItem.Name = "StatisticsToolStripMenuItem";
+            this.StatisticsToolStripMenuItem.Size = new System.Drawing.Size(80, 20);
+            this.StatisticsToolStripMenuItem.Text = "Статистика";
+            this.StatisticsToolStripMenuItem.Click += new System.EventHandler(this.StatisticsToolStripMenuItem_Click);
             // 
             // выйтиToolStripMenuItem
             // 
@@ -282,15 +225,8 @@
         private System.Windows.Forms.ToolStripMenuItem ExitToMainMenuToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem ExitGameToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem AboutPlayerToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem отношенияToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem AllianceToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem TradeToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem AttitudesToolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem развитиеToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem CultureToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem MilitaryToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem ProductionToolStripMenuItem;
         private System.Windows.Forms.Button EndTurnByButton;
         public System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.ToolStripMenuItem StatisticsToolStripMenuItem;
     }
 }

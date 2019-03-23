@@ -16,10 +16,19 @@ namespace Langelia
         private int _numberFood;
         private int _numberCulture;
         private int _numberMilitary;
+        private int _idPlayer;
 
         public int Id { get { return _id; } }
-        public string NameCity { get { return _nameCity; } }
-        public int NumberCitizen { get { return _numberCitizen; } }
+        public string NameCity
+        {
+            get { return _nameCity; }
+            set { _nameCity = value; }
+        }
+        public int NumberCitizen
+        {
+            get { return _numberCitizen; }
+            set { _numberCitizen = value; }
+        }
         public int NumberProduct
         {
             get { return _numberProduct; }
@@ -35,20 +44,30 @@ namespace Langelia
             get { return _numberMilitary; }
             set { _numberMilitary = value; }
         }
-        public int NumberFood { get { return _numberFood; } }
+        public int NumberFood
+        {
+            get { return _numberFood; }
+            set { _numberFood = value; }
+        }
+        public int IdPlayer
+        {
+            get { return _idPlayer; }
+            set { _idPlayer = value; }
+        }
 
         public City() { }
 
         public City(int id, string nameCity, int numberCitizen, int numberProduct, int numberFood, int numberCulture, 
-            int numberMilitary)
+            int numberMilitary, int idPlayer)
         {
             _id = id;
-            _nameCity = nameCity;
+            _nameCity = nameCity.Replace("'", "");
             _numberCitizen = numberCitizen;
             _numberFood = numberFood;
             _numberProduct = numberProduct + 1;
             _numberMilitary = numberMilitary;
             _numberCulture = numberCulture;
+            _idPlayer = idPlayer;
         }
 
         public void CreateBuilding(int id, string sqlCon)
@@ -97,7 +116,8 @@ namespace Langelia
             {
                 connection.Open();
                 string sqlExp = $"DELETE FROM List_build WHERE Id_city = {_id}; " +
-                    $"UPDATE Cell SET Id_city = NULL WHERE Id_city = {_id}";
+                    $"UPDATE Cell SET Id_city = NULL WHERE Id_city = {_id}; " +
+                    $"DELETE FROM City WHERE Id = {_id}";
                 (new SqlCommand(sqlExp, connection)).ExecuteNonQuery();
             }
         }

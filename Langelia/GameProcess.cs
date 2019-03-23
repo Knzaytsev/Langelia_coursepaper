@@ -23,7 +23,8 @@ namespace Langelia
         private DirectoryInfo dir = new DirectoryInfo(@"C:\Users\пк\Desktop\Учёба\2 курс\Курсовая\Langelia\Langelia_coursepaper\Langelia");
         private string connectionStr = @"Data Source=.\SQLSERVEREDU;Initial Catalog=GameLang;Integrated Security=True";
         private string sqlExp = "";
-        bool close = true;
+        private bool close = true;
+        private string path = "";
         public GameProcess()
         {
             InitializeComponent();
@@ -47,47 +48,30 @@ namespace Langelia
 
         private void AboutPlayerToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AboutPlayer form = new AboutPlayer();
+            AboutPlayer form = new AboutPlayer(connectionStr);
             form.Show();
             form.Activate();
         }
 
         private void CitiesToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            ListObjects form = new ListObjects();
-            form.Show();
-            form.Activate();
-        }
-
-        private void AllianceToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            AttitudeAlliance form = new AttitudeAlliance();
-            form.Show();
-            form.Activate();
-        }
-
-        private void TradeToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            AttitudeTrade form = new AttitudeTrade();
-            form.Show();
-            form.Activate();
-        }
-
-        private void AttitudesToolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-            AttitudeAttitudes form = new AttitudeAttitudes();
+            ListObjects form = new ListObjects("City", connectionStr);
             form.Show();
             form.Activate();
         }
 
         private void PersonsToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-
+            ListObjects form = new ListObjects("Person", connectionStr);
+            form.Show();
+            form.Activate();
         }
 
         private void PlayersToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-
+            ListObjects form = new ListObjects("Player", connectionStr);
+            form.Show();
+            form.Activate();
         }
 
         private void EndTurnByButton_Click(object sender, EventArgs e)
@@ -95,7 +79,7 @@ namespace Langelia
             using (SqlConnection connection = new SqlConnection(connectionStr))
             {
                 connection.Open();
-                sqlExp = $"SELECT Id, Number_move FROM Person";
+                sqlExp = $"SELECT Person.Id, Number_movement FROM Person JOIN Type_person ON Person.Id_type_person = Type_person.Id";
                 SqlCommand cmd = new SqlCommand(sqlExp, connection);
                 SqlDataReader reader = cmd.ExecuteReader();
                 while (reader.Read())
@@ -139,13 +123,14 @@ namespace Langelia
         {
             if(e.Button == MouseButtons.Left)
             {
-                int x = e.X / 32;
-                int y = e.Y / 32;
-                int id = y * 40 + x + 1;
+                int x = e.X / 32;                   //Корректировка x
+                int y = e.Y / 32;                   //Корректировка у
+                int id = y * 40 + x + 1;            //Вычисление идентификатора клетки
                 using (SqlConnection connection = new SqlConnection(connectionStr))
                 {
                     connection.Open();
-                    sqlExp = $"SELECT * FROM City WHERE Id_player = 1 AND Id = (SELECT Id_city FROM Cell WHERE Cell.Id = {id})";
+                    sqlExp = $"SELECT * FROM City WHERE Id_player = 1 AND " +
+                        $"Id = (SELECT Id_city FROM Cell WHERE Cell.Id = {id})";
                     SqlCommand cmd = new SqlCommand(sqlExp, connection);
                     SqlDataReader reader = cmd.ExecuteReader();
                     if(!reader.Read())
@@ -291,6 +276,40 @@ namespace Langelia
             }
         }
 
+        private void DrawCity(int id, int player)
+        {
+            using(SqlConnection connection = new SqlConnection(connectionStr))
+            {
+                connection.Open();
+                string sqlExp = "";
+                switch (player)
+                {
+                    case 1:
+                        sqlExp = $"SELECT Path FROM Picture WHERE Id = 9";
+                        break;
+                    case 2:
+                        sqlExp = "SELECT Path FROM Picture WHERE Id = 14";
+                        break;
+                    case 3:
+                        sqlExp = "SELECT Path FROM Picture WHERE Id = 19";
+                        break;
+                }
+                SqlDataReader reader = (new SqlCommand(sqlExp, connection)).ExecuteReader();
+                reader.Read();
+                string path = reader.GetString(0);
+                reader.Close();
+                sqlExp = $"SELECT Id FROM Cell WHERE Id_city = {id}";
+                reader = (new SqlCommand(sqlExp, connection)).ExecuteReader();
+                if (reader.Read())
+                {
+                    Graphics g = Graphics.FromImage(pictureBox1.Image);
+                    int x = reader.GetInt32(0) % 40 - 1;
+                    int y = reader.GetInt32(0) / 40;
+                    g.DrawImage(new Bitmap(path), x * 32 - 2, y * 32);
+                }
+            }
+        }
+
         private void FormLoad(object sender, EventArgs e)
         {
             pictureBox1.Image =
@@ -299,7 +318,10 @@ namespace Langelia
             {
                 connection.Open();
                 Graphics g = Graphics.FromImage(pictureBox1.Image);
-                sqlExp = "SELECT * FROM Person";
+                //sqlExp = "SELECT * FROM Person";
+                sqlExp = $"SELECT Person.Id, Name, Number_movement, Number_health, Number_attack, Number_defense, Id_type_person, " +
+                    $"X, Y, Id_player " +
+                    $"FROM Person JOIN Type_person ON Person.Id_type_person = Type_person.Id";
                 SqlCommand cmd = new SqlCommand(sqlExp, connection);
                 SqlDataReader reader = cmd.ExecuteReader();
                 while (reader.Read())
@@ -337,13 +359,71 @@ namespace Langelia
                 while (reader.Read())
                 {
                     cities.Add(reader.GetInt32(0), new City(reader.GetInt32(0), reader.GetString(1), reader.GetInt32(3), 
-                        reader.GetInt32(4), reader.GetInt32(5), reader.GetInt32(7), reader.GetInt32(8)));
-                    DrawCell(reader.GetInt32(0));
+                        reader.GetInt32(4), reader.GetInt32(5), reader.GetInt32(7), reader.GetInt32(8), reader.GetInt32(6)));
+                    DrawCity(reader.GetInt32(0), reader.GetInt32(6));
                 }
                 pictureBox1.Refresh();
                 g.Dispose();
                 connection.Close();
             }
+        }
+
+        private void SaveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            bool ok = false;
+            if(path == "")
+            {
+                ok = Saving();
+            }
+            if (ok == true)
+            {
+                SaveGame sg = new SaveGame(path, connectionStr, people, cities);
+            }
+        }
+
+        private void SaveAsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (Saving())
+            {
+                SaveGame sg = new SaveGame(path, connectionStr, people, cities);
+            }
+        }
+
+        public void LoadSave(string loadPath)
+        {
+            path = loadPath;
+        }
+
+        private bool Saving()
+        {
+            SaveFileDialog sfd = new SaveFileDialog();
+            sfd.Filter = "SAVE|*.save";
+            sfd.ShowDialog();
+            if(sfd.FileName != "")
+            {
+                path = sfd.FileName;
+                return true;
+            }
+            return false;
+        }
+
+        private void StatisticsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var inputCities = (from c in cities.Values where c.IdPlayer == 1 select c).ToArray();
+            if (inputCities.Length == 0)
+            {
+                MessageBox.Show("У Вас ещё нет ни одного города, чтобы проводить статистику!");
+                return;
+            }
+            ChartCities cs = new ChartCities(inputCities);
+            cs.Show();
+        }
+
+        private void SearchToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Searching form = new Searching(connectionStr);
+            form.Show();
+            form.Activate();
         }
     }
 }

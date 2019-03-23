@@ -24,7 +24,8 @@ namespace Langelia
 
         private void NewGame_Click(object sender, EventArgs e)
         {
-            DirectoryInfo dir = new DirectoryInfo(@"C:\Users\пк\Desktop\Учёба\2 курс\Курсовая\Langelia\Langelia_coursepaper\Langelia");
+            DataBaseCommands.Updating("original.save");
+            /*DirectoryInfo dir = new DirectoryInfo(@"C:\Users\пк\Desktop\Учёба\2 курс\Курсовая\Langelia\Langelia_coursepaper\Langelia");
             var map = new TmxMap(dir.FullName + @"\Properties\Map.tmx");
             var layerGraph = map.Layers[3];
             var layerType = map.Layers[2];
@@ -52,16 +53,29 @@ namespace Langelia
                     cmd.ExecuteNonQuery();
                 }
             }
+            //DataBaseCommands.Cleaning();*/
+            OpenGameProcess("");
+        }
+
+        private void LoadGame_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog opf = new OpenFileDialog();
+            opf.Filter = "SAVE (*.save) | *.save";
+            if (opf.ShowDialog() == DialogResult.OK)
+            {
+                DataBaseCommands.Updating(opf.FileName);
+                OpenGameProcess(opf.FileName);
+            }
+        }
+
+        private void OpenGameProcess(string path)
+        {
             GameProcess form = new GameProcess();
             form.mainMenu = this;
             this.Visible = false;
+            form.LoadSave(path);
             form.Show();
             form.Activate();
-        }
-
-        private void ReadingAndAdding(string path)
-        {
-
         }
     }
 }

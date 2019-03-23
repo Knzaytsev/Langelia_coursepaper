@@ -24,9 +24,6 @@ C:\Users\пк\Desktop\Учёба\2 курс\Курсовая\Langelia\Langelia_c
 C:\Users\пк\Desktop\Учёба\2 курс\Курсовая\Langelia\Langelia_coursepaper\Langelia\bin\Debug\TiledSharp.pdb
 C:\Users\пк\Desktop\Учёба\2 курс\Курсовая\Langelia\Langelia_coursepaper\Langelia\obj\Debug\Langelia.csprojAssemblyReference.cache
 C:\Users\пк\Desktop\Учёба\2 курс\Курсовая\Langelia\Langelia_coursepaper\Langelia\obj\Debug\Langelia.AboutPlayer.resources
-C:\Users\пк\Desktop\Учёба\2 курс\Курсовая\Langelia\Langelia_coursepaper\Langelia\obj\Debug\Langelia.AttitudeAlliance.resources
-C:\Users\пк\Desktop\Учёба\2 курс\Курсовая\Langelia\Langelia_coursepaper\Langelia\obj\Debug\Langelia.AttitudeAttitudes.resources
-C:\Users\пк\Desktop\Учёба\2 курс\Курсовая\Langelia\Langelia_coursepaper\Langelia\obj\Debug\Langelia.AttitudeTrade.resources
 C:\Users\пк\Desktop\Учёба\2 курс\Курсовая\Langelia\Langelia_coursepaper\Langelia\obj\Debug\Langelia.MainMenu.resources
 C:\Users\пк\Desktop\Учёба\2 курс\Курсовая\Langelia\Langelia_coursepaper\Langelia\obj\Debug\Langelia.GameProcess.resources
 C:\Users\пк\Desktop\Учёба\2 курс\Курсовая\Langelia\Langelia_coursepaper\Langelia\obj\Debug\Langelia.ListObjects.resources
@@ -39,3 +36,7 @@ C:\Users\пк\Desktop\Учёба\2 курс\Курсовая\Langelia\Langelia_c
 C:\Users\пк\Desktop\Учёба\2 курс\Курсовая\Langelia\Langelia_coursepaper\Langelia\obj\Debug\Langelia.AboutPerson.resources
 C:\Users\пк\Desktop\Учёба\2 курс\Курсовая\Langelia\Langelia_coursepaper\Langelia\obj\Debug\Langelia.AboutCity.resources
 C:\Users\пк\Desktop\Учёба\2 курс\Курсовая\Langelia\Langelia_coursepaper\Langelia\obj\Debug\Langelia.NameCity.resources
+C:\Users\пк\Desktop\Учёба\2 курс\Курсовая\Langelia\Langelia_coursepaper\Langelia\obj\Debug\Langelia.ChartCities.resources
+C:\Users\пк\Desktop\Учёба\2 курс\Курсовая\Langelia\Langelia_coursepaper\Langelia\bin\Debug\Xceed.Words.NET.dll
+C:\Users\пк\Desktop\Учёба\2 курс\Курсовая\Langelia\Langelia_coursepaper\Langelia\obj\Debug\Langelia.Searching.resources
+C:\Users\пк\Desktop\Учёба\2 курс\Курсовая\Langelia\Langelia_coursepaper\Langelia\obj\Debug\Langelia.SearchResult.resources
