@@ -40,3 +40,25 @@ C:\Users\пк\Desktop\Учёба\2 курс\Курсовая\Langelia\Langelia_c
 C:\Users\пк\Desktop\Учёба\2 курс\Курсовая\Langelia\Langelia_coursepaper\Langelia\bin\Debug\Xceed.Words.NET.dll
 C:\Users\пк\Desktop\Учёба\2 курс\Курсовая\Langelia\Langelia_coursepaper\Langelia\obj\Debug\Langelia.Searching.resources
 C:\Users\пк\Desktop\Учёба\2 курс\Курсовая\Langelia\Langelia_coursepaper\Langelia\obj\Debug\Langelia.SearchResult.resources
+F:\Учёба\Магистратура\БД\Langelia_coursepaper\Langelia\bin\Debug\Langelia.exe.config
+F:\Учёба\Магистратура\БД\Langelia_coursepaper\Langelia\bin\Debug\Langelia.exe
+F:\Учёба\Магистратура\БД\Langelia_coursepaper\Langelia\bin\Debug\Langelia.pdb
+F:\Учёба\Магистратура\БД\Langelia_coursepaper\Langelia\bin\Debug\Xceed.Words.NET.dll
+F:\Учёба\Магистратура\БД\Langelia_coursepaper\Langelia\bin\Debug\TiledSharp.pdb
+F:\Учёба\Магистратура\БД\Langelia_coursepaper\Langelia\obj\Debug\Langelia.csproj.AssemblyReference.cache
+F:\Учёба\Магистратура\БД\Langelia_coursepaper\Langelia\obj\Debug\Langelia.AboutCity.resources
+F:\Учёба\Магистратура\БД\Langelia_coursepaper\Langelia\obj\Debug\Langelia.AboutPerson.resources
+F:\Учёба\Магистратура\БД\Langelia_coursepaper\Langelia\obj\Debug\Langelia.AboutPlayer.resources
+F:\Учёба\Магистратура\БД\Langelia_coursepaper\Langelia\obj\Debug\Langelia.ChartCities.resources
+F:\Учёба\Магистратура\БД\Langelia_coursepaper\Langelia\obj\Debug\Langelia.MainMenu.resources
+F:\Учёба\Магистратура\БД\Langelia_coursepaper\Langelia\obj\Debug\Langelia.GameProcess.resources
+F:\Учёба\Магистратура\БД\Langelia_coursepaper\Langelia\obj\Debug\Langelia.ListObjects.resources
+F:\Учёба\Магистратура\БД\Langelia_coursepaper\Langelia\obj\Debug\Langelia.NameCity.resources
+F:\Учёба\Магистратура\БД\Langelia_coursepaper\Langelia\obj\Debug\Langelia.Properties.Resources.resources
+F:\Учёба\Магистратура\БД\Langelia_coursepaper\Langelia\obj\Debug\Langelia.Searching.resources
+F:\Учёба\Магистратура\БД\Langelia_coursepaper\Langelia\obj\Debug\Langelia.SearchResult.resources
+F:\Учёба\Магистратура\БД\Langelia_coursepaper\Langelia\obj\Debug\Langelia.csproj.GenerateResource.cache
+F:\Учёба\Магистратура\БД\Langelia_coursepaper\Langelia\obj\Debug\Langelia.csproj.CoreCompileInputs.cache
+F:\Учёба\Магистратура\БД\Langelia_coursepaper\Langelia\obj\Debug\Langelia.csproj.CopyComplete
+F:\Учёба\Магистратура\БД\Langelia_coursepaper\Langelia\obj\Debug\Langelia.exe
+F:\Учёба\Магистратура\БД\Langelia_coursepaper\Langelia\obj\Debug\Langelia.pdb

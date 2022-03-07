@@ -104,12 +104,12 @@ namespace Langelia
                 sqlExp = $"UPDATE Cell SET Id_city = {idCity} WHERE Id = {id}";
                 cmd = new SqlCommand(sqlExp, connection);
                 cmd.ExecuteNonQuery();
-                sqlExp = $"UPDATE City SET Number_product = CASE (SELECT Production FROM Cell WHERE Id_city = {idCity}) " +
+                sqlExp = $"UPDATE City SET Number_product = CASE (SELECT Type_production_fk FROM Production WHERE Id = (SELECT Production FROM Cell WHERE Id_city = {idCity})) " +
                     $"WHEN 1 THEN 0 " +
-                    $"WHEN 2 THEN(SELECT Number FROM Production WHERE Id = (SELECT Production FROM Cell WHERE Id_city = {idCity})) " +
+                    $"WHEN 2 THEN(SELECT Number FROM Production WHERE Id = (SELECT Production FROM Cell WHERE Id_city = {idCity}) AND Type_production_fk = 2) " +
                     $"END, " +
-                    $"Number_food = CASE(SELECT Production FROM Cell WHERE Id_city = {idCity}) " +
-                    $"WHEN 1 THEN (SELECT Number FROM Production WHERE Id = (SELECT Production FROM Cell WHERE Id_city = {idCity})) " +
+                    $"Number_food = CASE(SELECT Type_production_fk FROM Production WHERE Id = (SELECT Production FROM Cell WHERE Id_city = {idCity})) " +
+                    $"WHEN 1 THEN (SELECT Number FROM Production WHERE Id = (SELECT Production FROM Cell WHERE Id_city = {idCity}) AND Type_production_fk = 1) " +
                     $"WHEN 2 THEN 0 " +
                     $"END";
                 (new SqlCommand(sqlExp, connection)).ExecuteNonQuery();

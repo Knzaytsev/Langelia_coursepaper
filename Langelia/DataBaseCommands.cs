@@ -11,7 +11,7 @@ namespace Langelia
 {
     class DataBaseCommands
     {
-        private static string sqlConnection = @"Data Source=.\SQLSERVEREDU;Initial Catalog=GameLang;Integrated Security=True";
+        private static string sqlConnection = @"Data Source=.\SQLEXPRESS;Initial Catalog=Langelia;Integrated Security=True";
 
         public static void Cleaning()
         {
@@ -34,10 +34,11 @@ namespace Langelia
             CleanListBuild();
             CleanCities();
             CleanPersons();
+            //CleanPlayer();
+            UpdatePlayer(sg.player);
             UpdateCities(sg.cities);
             UpdateCells(sg.cell);
             UpdateListBuild(sg.listBuildings);
-            UpdatePlayer(sg.player);
             UpdatePerson(sg.personSave);
         }
 

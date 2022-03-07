@@ -52,7 +52,7 @@ namespace Langelia
                     int id = reader.GetInt32(0) - 1;
                     cellsPass[id] = reader.GetInt32(1);
                     cellPenalty[id] = reader.GetInt32(2);
-                    cellProduction[id] = reader.GetInt32(3);
+                    cellProduction[id] = reader.GetInt32(6);
                     cellPicture[id] = reader.GetInt32(4);
                 }
                 reader.Close();

@@ -25,15 +25,15 @@ namespace Langelia
         private void NewGame_Click(object sender, EventArgs e)
         {
             DataBaseCommands.Updating("original.save");
-            /*DirectoryInfo dir = new DirectoryInfo(@"C:\Users\пк\Desktop\Учёба\2 курс\Курсовая\Langelia\Langelia_coursepaper\Langelia");
+            /*DirectoryInfo dir = new DirectoryInfo(@"F:\Учёба\Магистратура\БД\Langelia_coursepaper\Langelia");
             var map = new TmxMap(dir.FullName + @"\Properties\Map.tmx");
             var layerGraph = map.Layers[3];
             var layerType = map.Layers[2];
             var layerPassability = map.Layers[1];
             var layerPenalty = map.Layers[0];
-            DataBaseCommands.Cleaning();
+            //DataBaseCommands.Cleaning();
             using (SqlConnection connection =
-                new SqlConnection(@"Data Source=.\SQLSERVEREDU;Initial Catalog=GameLang;Integrated Security=True"))
+                new SqlConnection(@"Data Source=.\SQLEXPRESS;Initial Catalog=Langelia;Integrated Security=True"))
             {
                 connection.Open();
                 SqlCommand cmd;
@@ -44,7 +44,7 @@ namespace Langelia
                     int pen = layerPenalty.Tiles[i].Gid;
                     int type = layerType.Tiles[i].Gid != 0 ? layerType.Tiles[i].Gid : 3;
                     int picture = layerGraph.Tiles[i].Gid;
-                    string sqlExp = string.Format(@"INSERT INTO Cell (Passability, Penalty, Production, Picture) 
+                    string sqlExp = string.Format(@"INSERT INTO Cell (Passability, Penalty, Production, Id_picture) 
                             VALUES ({0}, {1}, {2}, {3}); 
                             UPDATE Cell SET Id_city = CASE Id WHEN 118 THEN 1 WHEN 622 THEN 2 END", pass, pen, type, picture);
                     //sqlExp = string.Format(@"UPDATE Cell SET Passability = {0}, Penalty = {1}, Production = {2}, 

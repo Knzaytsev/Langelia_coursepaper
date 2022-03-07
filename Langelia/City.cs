@@ -80,23 +80,10 @@ namespace Langelia
                 sqlExp = $"UPDATE Player SET Number_production = Number_production - (SELECT Cost FROM Building WHERE Id = {id}) " +
                     $"WHERE Id = (SELECT Id_player FROM City WHERE Id = {_id})";
                 (new SqlCommand(sqlExp, connection)).ExecuteNonQuery();
-                sqlExp = $"SELECT Type_points FROM Building WHERE Id = {id}";
+                sqlExp = $"SELECT Description FROM Type_production WHERE Id = (SELECT Type_production_fk FROM Type_building WHERE Id = (SELECT Type_points FROM Building WHERE Id = {id}))";
                 SqlDataReader reader = (new SqlCommand(sqlExp, connection)).ExecuteReader();
                 reader.Read();
-                string type = "";
-                switch (reader.GetInt32(0))
-                {
-                    case 1:
-                        type = "Number_culture";
-                        break;
-                    case 2:
-                        type = "Number_military";
-                        break;
-                    case 3:
-                        type = "Number_product";
-
-                        break;
-                }
+                var type = reader.GetString(0);
                 reader.Close();
                 sqlExp = $"UPDATE City SET {type} = {type} + " +
                     $"(SELECT Number FROM Type_build_points WHERE Id = (SELECT Type_points FROM Building WHERE Id = {id}))";

@@ -34,18 +34,44 @@ namespace Langelia
             switch (_object)
             {
                 case "City":
-                    sqlExp = $"SELECT Name_City, Number_citizen, Number_food, Number_product, Number_culture, " +
-                        $"Number_military FROM City WHERE Id_player = 1";
+                    sqlExp = $"SELECT Name_city as \"Название города\", [1] as \"Культура\", [2] as \"Война\", [3] as \"Производство\" " +
+                        $"FROM " +
+                        $"(SELECT Name_City, Type_build_points.Number, Type_building.Id as \"tbp_id\" " +
+                        $"FROM City " +
+                        $"join List_build " +
+                        $"on City.Id = List_build.Id_city " +
+                        $"join Building " +
+                        $"on Building.Id = List_build.Id " +
+                        $"join Type_building " +
+                        $"on Building.Type_points = Type_building.Id " +
+                        $"join Type_build_points " +
+                        $"on Building.Type_build_points = Type_build_points.Id " +
+                        $"WHERE Id_player = 1) src " +
+                        $"PIVOT " +
+                        $"( " +
+                        $"SUM(Number) " +
+                        $"FOR \"tbp_id\" IN([1], [2], [3])" +
+                        $") piv";
                     Show(sqlExp);
                     break;
                 case "Player":
-                    sqlExp = $"SELECT Name_gov, Number_citizen, Number_culture, Number_military, Number_diplomacy, Name_ruler, " +
-                        $"Type_ruler_points, Age, Number_production FROM Player";
+                    sqlExp = $"SELECT Name_gov as \"Государство\", Number_citizen as \"Жители\", Number_culture as \"Культура\", " +
+                        $"Number_military as \"Война\", Number_production as \"Производство\", " +
+                        $"Number_diplomacy as \"Дипломатия\", Name_ruler as \"Правитель\", " +
+                        $"Age as \"Возраст\" FROM Player";
                     Show(sqlExp);
                     break;
                 case "Person":
-                    sqlExp = $"SELECT Name, Number_health, X, Y, Number_defense, Number_attack, Number_movement, Name_type " +
+                    sqlExp = $"SELECT Name as \"Наименование\", Number_health as \"Количество здоровья\", Number_defense as \"Защита\", " +
+                        $"Number_attack as \"Атака\", Number_movement as \"Очков движения\", Name_type as \"Класс персонажа\" " +
                         $"FROM Person JOIN Type_person ON Person.Id_type_person = Type_person.Id WHERE Id_player = 1";
+                    Show(sqlExp);
+                    break;
+                case "Buildings":
+                    sqlExp = $"select Player.Name_ruler as \"Правитель\", City.Name_city as \"Город\", count(*) as \"Количество построек\" from Player " +
+                        $"join city on Player.id = city.Id_player " +
+                        $"join List_build on city.id = List_build.Id_city where Player.Id = 1 " +
+                        $"group by Player.Name_ruler, City.Name_city";
                     Show(sqlExp);
                     break;
             }
